@@ -30,6 +30,8 @@ char g_stratum_coin_exclude[256];
 
 char g_stratum_algo[256];
 double g_stratum_difficulty;
+double g_stratum_min_diff;
+double g_stratum_max_diff;
 
 int g_stratum_max_ttf;
 int g_stratum_max_cons = 5000;
@@ -120,6 +122,7 @@ YAAMP_ALGO g_algos[] =
 	{"x14", x14_hash, 1, 0, 0},
 	{"x15", x15_hash, 1, 0, 0},
 	{"x17", x17_hash, 1, 0, 0},
+	{"x22i", x22i_hash, 1, 0, 0},
 
 	{"x11evo", x11evo_hash, 1, 0, 0},
 	{"xevan", xevan_hash, 0x100, 0, 0},
@@ -128,6 +131,7 @@ YAAMP_ALGO g_algos[] =
 	{"x16s", x16s_hash, 0x100, 0, 0},
 	{"timetravel", timetravel_hash, 0x100, 0, 0},
 	{"bitcore", timetravel10_hash, 0x100, 0, 0},
+	{"exosis", exosis_hash, 0x100, 0, 0},
 	{"hsr", hsr_hash, 1, 0, 0},
 	{"hmq1725", hmq17_hash, 0x10000, 0, 0},
 
@@ -136,11 +140,14 @@ YAAMP_ALGO g_algos[] =
 	{"allium", allium_hash, 0x100, 0, 0},
 	{"lyra2", lyra2re_hash, 0x80, 0, 0},
 	{"lyra2v2", lyra2v2_hash, 0x100, 0, 0},
+	{"lyra2v3", lyra2v3_hash, 0x100, 0, 0},
 	{"lyra2z", lyra2z_hash, 0x100, 0, 0},
+	{"lyra2zz", lyra2zz_hash, 0x100, 0, 0},
 
 	{"bastion", bastion_hash, 1, 0 },
 	{"blake", blake_hash, 1, 0 },
 	{"blakecoin", blakecoin_hash, 1 /*0x100*/, 0, sha256_hash_hex },
+	{"blake2b", blake2b_hash, 1, 0 },
 	{"blake2s", blake2s_hash, 1, 0 },
 	{"vanilla", blakecoin_hash, 1, 0 },
 	{"decred", decred_hash, 1, 0 },
@@ -167,9 +174,11 @@ YAAMP_ALGO g_algos[] =
 	{"skunk", skunk_hash, 1, 0, 0},
 
 	{"bmw", bmw_hash, 1, 0, 0},
+	{"lbk3", lbk3_hash, 0x100, 0, 0},
 	{"lbry", lbry_hash, 0x100, 0, 0},
 	{"luffa", luffa_hash, 1, 0, 0},
 	{"penta", penta_hash, 1, 0, 0},
+	{"rainforest", rainforest_hash, 0x100, 0, 0},
 	{"skein2", skein2_hash, 1, 0, 0},
 	{"yescrypt", yescrypt_hash, 0x10000, 0, 0},
 	{"yescryptR16", yescryptR16_hash, 0x10000, 0, 0 },
@@ -181,11 +190,14 @@ YAAMP_ALGO g_algos[] =
 	{"m7m", m7m_hash, 0x10000, 0, 0},
 	{"veltor", veltor_hash, 1, 0, 0},
 	{"velvet", velvet_hash, 0x10000, 0, 0},
-	{"argon2", argon2_hash, 0x10000, 0, sha256_hash_hex },
+	{"argon2", argon2a_hash, 0x10000, 0, sha256_hash_hex },
+	{"argon2d-dyn", argon2d_dyn_hash, 0x10000, 0, 0 }, // Dynamic Argon2d Implementation
 	{"vitalium", vitalium_hash, 1, 0, 0},
 	{"aergo", aergo_hash, 1, 0, 0},
 
 	{"sha256t", sha256t_hash, 1, 0, 0}, // sha256 3x
+
+	{"sha256q", sha256q_hash, 1, 0, 0}, // sha256 4x
 
 	{"sib", sib_hash, 1, 0, 0},
 
@@ -255,6 +267,9 @@ int main(int argc, char **argv)
 
 	strcpy(g_stratum_algo, iniparser_getstring(ini, "STRATUM:algo", NULL));
 	g_stratum_difficulty = iniparser_getdouble(ini, "STRATUM:difficulty", 16);
+	g_stratum_min_diff = iniparser_getdouble(ini, "STRATUM:diff_min", g_stratum_difficulty/2);
+	g_stratum_max_diff = iniparser_getdouble(ini, "STRATUM:diff_max", g_stratum_difficulty*8192);
+
 	g_stratum_max_cons = iniparser_getint(ini, "STRATUM:max_cons", 5000);
 	g_stratum_max_ttf = iniparser_getint(ini, "STRATUM:max_ttf", 0x70000000);
 	g_stratum_reconnect = iniparser_getint(ini, "STRATUM:reconnect", true);
@@ -292,6 +307,7 @@ int main(int argc, char **argv)
 	g_allow_rolltime = strcmp(g_stratum_algo,"x11evo");
 	g_allow_rolltime = g_allow_rolltime && strcmp(g_stratum_algo,"timetravel");
 	g_allow_rolltime = g_allow_rolltime && strcmp(g_stratum_algo,"bitcore");
+	g_allow_rolltime = g_allow_rolltime && strcmp(g_stratum_algo,"exosis");
 	if (!g_allow_rolltime)
 		stratumlog("note: time roll disallowed for %s algo\n", g_current_algo->name);
 

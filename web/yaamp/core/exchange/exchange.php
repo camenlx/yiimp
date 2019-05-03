@@ -19,15 +19,16 @@ require_once("bitz.php");
 require_once("bleutrade.php");
 require_once("ccexapi.php");
 require_once("cexio.php");
+require_once("coinbene.php");
+require_once("crex24.php");
 require_once("cryptobridge.php");
+require_once("escodex.php");
 require_once("gateio.php");
 require_once("graviex.php");
-require_once("cryptohub.php");
 require_once("kraken.php");
 require_once("poloniex.php");
 require_once("yobit.php");
 require_once("shapeshift.php");
-require_once("bter.php");
 require_once("empoex.php");
 require_once("jubi.php");
 require_once("alcurex.php");
@@ -89,18 +90,18 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://poloniex.com/exchange#{$lowbase}_{$lowsymbol}";
 	else if($market == 'bleutrade')
 		$url = "https://bleutrade.com/exchange/{$symbol}/{$base}";
-	else if($market == 'bter')
-		$url = "https://bter.com/trade/{$lowsymbol}_{$lowbase}";
 	else if($market == 'cexio')
 		$url = "https://cex.io/trade/{$symbol}-{$base}";
+	else if($market == 'coinbene')
+		$url = "https://www.coinbene.com/#/market?pairId={$symbol}{$base}";
 	else if($market == 'coinexchange')
 		$url = "https://www.coinexchange.io/market/{$symbol}/{$base}";
 	else if($market == 'coinsmarkets')
 		$url = "https://coinsmarkets.com/trade-{$base}-{$symbol}.htm";
+	else if($market == 'crex24')
+		$url = "https://crex24.com/exchange/{$symbol}-{$base}";
 	else if($market == 'cryptobridge')
 		$url = "https://wallet.crypto-bridge.org/market/BRIDGE.{$symbol}_BRIDGE.{$base}";
-	else if($market == 'cryptohub')
-		$url = "https://cryptohub.online/market/{$symbol}/{$base}";
 	else if($market == 'cryptopia')
 		$url = "https://www.cryptopia.co.nz/Exchange?market={$symbol}_{$base}";
 	else if($market == 'cryptowatch')
@@ -109,6 +110,8 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://c-cex.com/?p={$lowsymbol}-{$lowbase}";
 	else if($market == 'empoex')
 		$url = "http://www.empoex.com/trade/{$symbol}-{$base}";
+	else if($market == 'escodex')
+		$url = "https://wallet.escodex.com/market/ESCODEX.{$symbol}_ESCODEX.{$base}";
 	else if($market == 'gateio')
 		$url = "https://gate.io/trade/{$symbol}_{$base}";
 	else if($market == 'graviex')
@@ -118,7 +121,7 @@ function getMarketUrl($coin, $marketName)
 	else if($market == 'hitbtc')
 		$url = "https://hitbtc.com/exchange/{$symbol}-to-{$base}";
 	else if($market == 'kucoin')
-		$url = "https://www.kucoin.com/#/trade.pro/{$symbol}-{$base}";
+		$url = "https://www.kucoin.com/trade/{$symbol}-{$base}";
 	else if($market == 'livecoin')
 		$url = "https://www.livecoin.net/trade/?currencyPair={$symbol}%2F{$base}";
 	else if($market == 'nova')

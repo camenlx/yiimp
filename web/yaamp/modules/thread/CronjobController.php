@@ -129,6 +129,7 @@ class CronjobController extends CommonController
 				getBitstampBalances();
 				getCexIoBalances();
 				doBittrexTrading();
+				doCrex24Trading();
 				doCryptopiaTrading();
 				doKrakenTrading();
 				doLiveCoinTrading();
@@ -140,7 +141,6 @@ class CronjobController extends CommonController
 
 				doBinanceTrading();
 				doCCexTrading();
-				doBterTrading();
 				doBleutradeTrading();
 				doKuCoinTrading();
 				doNovaTrading();
